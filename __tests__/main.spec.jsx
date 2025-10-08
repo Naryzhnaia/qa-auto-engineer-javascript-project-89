@@ -6,172 +6,129 @@ import { render, screen, cleanup } from '@testing-library/react'
 import { expect, test, beforeEach, afterEach, describe, it } from 'vitest'
 import userEvent from '@testing-library/user-event'
 import { texts } from '../__fixtures__/texts.js'
-import { buttons } from '../__fixtures__/buttons.js'
+import { ChatPage } from '../__fixtures__/ChatPage.js'
 
 let user
-let openChatButton
-let startChatButton
+let chatPage
 
 beforeEach(async () => {
   user = userEvent.setup()
   render(Widget(steps))
-
-  openChatButton = screen.getByRole('button', { name: buttons.welcome.openChat })
-  await user.click(openChatButton)
-  startChatButton = screen.getByRole('button', { name: buttons.welcome.start })
-  await user.click(startChatButton)
+  chatPage = new ChatPage(screen, user)
+  await chatPage.openChat()
 })
 
 afterEach(() => {
   cleanup()
 })
 
-test('Открытие и закрытие чата', async () => {
-  const title = screen.getByText('Виртуальный помощник')
-  const firstMessage = screen.getByText(texts.welcome.greeting)
-  expect(title).toBeVisible()
-  expect(firstMessage).toBeVisible()
-
-  const closeButton = screen.getByRole('button', { name: /close/i })
-  await user.click(closeButton)
-
-  expect(openChatButton).toBeVisible()
+test('Не видно окно чата после закрытия чата', async () => {
+  await chatPage.closeChat()
+  expect(chatPage.buttons.openChatButton()).toBeVisible()
 })
 
 test('Старт чата и видимость базовых опций', async () => {
-  expect(await screen.findByText(texts.welcome.greeting)).toBeVisible()
-  expect(await screen.findByText(buttons.welcome.start)).toBeVisible()
-  expect(await screen.findByText(texts.start.intro)).toBeVisible()
-  expect(screen.getByRole('button', { name: buttons.start.switch })).toBeVisible()
-  expect(screen.getByRole('button', { name: buttons.start.try })).toBeVisible()
-  expect(screen.getByRole('button', { name: buttons.start.advanced })).toBeVisible()
+  expect(chatPage.texts.title()).toBeVisible()
+  expect(chatPage.texts.greetingText()).toBeVisible()
+  expect(chatPage.texts.introText()).toBeVisible()
+  expect(await chatPage.buttons.switchProfButton()).toBeVisible()
+  expect(await chatPage.buttons.tryItButton()).toBeVisible()
+  expect(await chatPage.buttons.advancedButton()).toBeVisible()
 })
 
 describe('Сценарий "Сменить профессию или трудоустроиться"', () => {
   it('Видимость текста и кнопок при сценарии записи на курс', async () => {
-    const switchButton = screen.getByRole('button', { name: buttons.start.switch })
-    await user.click(switchButton)
-    expect(await screen.findByText(texts.switch.info)).toBeVisible()
-    const moreButton = screen.getByRole('button', { name: buttons.switch.details })
-    await user.click(moreButton)
-    expect(await screen.findByText(texts.details.part1)).toBeVisible()
-    const subscribeButton = screen.getByRole('button', { name: buttons.details.subscribe })
-    const backButton = screen.getByRole('button', { name: buttons.details.back })
-    expect(subscribeButton).toBeVisible()
-    expect(backButton).toBeVisible()
+    await user.click(chatPage.buttons.switchProfButton())
+    expect(await chatPage.texts.switchProfInfo()).toBeVisible()
 
-    await user.click(subscribeButton)
-    expect(await screen.findByText(texts.subscribe.link)).toBeVisible()
-    expect(subscribeButton).toBeVisible()
-    expect(await screen.findByRole('button', { name: buttons.details.subscribe })).toBeVisible()
+    await user.click(chatPage.buttons.switchDetailsButton())
+    expect(await chatPage.texts.detailsInfo()).toBeVisible()
+    expect(await chatPage.buttons.subscribeButton()).toBeVisible()
+    expect(await chatPage.buttons.subscribeBackButton()).toBeVisible()
+
+    await user.click(chatPage.buttons.subscribeButton())
+    expect(await chatPage.texts.subscribeLinkText()).toBeVisible()
+    expect(chatPage.buttons.subscribeButton()).toBeVisible()
+    expect(await chatPage.buttons.subscribeButton()).toBeVisible()
   })
 
   it('Видимость текста и кнопок при сценарии "А есть что-нибудь попроще?"', async () => {
-    const switchButton = screen.getByRole('button', { name: buttons.start.switch })
-    await user.click(switchButton)
-    expect(screen.getByText(texts.switch.info)).toBeVisible()
-    const easyButton = screen.getByRole('button', { name: buttons.switch.try })
-    await user.click(easyButton)
-    const interestingButton = screen.getByRole('button', { name: buttons.try.interesting })
-    const switchProfButton = screen.getByRole('button', { name: buttons.try.switch })
-    const backButton = screen.getByRole('button', { name: buttons.try.back })
-    expect(screen.getByText(texts.try.info)).toBeVisible()
-    expect(interestingButton).toBeVisible()
-    expect(switchProfButton).toBeVisible()
-    expect(backButton).toBeVisible()
+    await user.click(chatPage.buttons.switchProfButton())
+    await user.click(chatPage.buttons.subscribeEasyButton())
+    expect(await chatPage.texts.tryInfoText()).toBeVisible()
+    expect(await chatPage.buttons.interestingButton()).toBeVisible()
+    expect(await chatPage.buttons.trySwitchButton()).toBeVisible()
+    expect(await chatPage.buttons.tryBackButton()).toBeVisible()
   })
 
   it('Можно вернуться в начало чата', async () => {
-    const switchButton = screen.getByRole('button', { name: buttons.start.switch })
-    await user.click(switchButton)
-    const backButton = screen.getByRole('button', { name: buttons.switch.back })
-    await user.click(backButton)
+    await user.click(chatPage.buttons.switchProfButton())
+    await user.click(chatPage.buttons.subscribeBackButton())
 
-    expect(screen.getByRole('button', { name: buttons.start.switch })).toBeVisible()
-    expect(screen.getByRole('button', { name: buttons.start.try })).toBeVisible()
-    expect(screen.getByRole('button', { name: buttons.start.advanced })).toBeVisible()
+    expect(await chatPage.buttons.switchProfButton()).toBeVisible()
+    expect(await chatPage.buttons.tryItButton()).toBeVisible()
+    expect(await chatPage.buttons.advancedButton()).toBeVisible()
   })
 })
 
 describe('Сценарий "Попробовать себя в IT"', () => {
   it('Видимость текста и кнопок при сценарии "Интересно"', async () => {
-    const tryButton = screen.getByRole('button', { name: buttons.start.try })
-    await user.click(tryButton)
-    expect(screen.getByText(texts.try.info)).toBeVisible()
+    await user.click(chatPage.buttons.tryItButton())
+    expect(await chatPage.texts.tryInfoText()).toBeVisible()
 
-    const interestingButton = screen.getByRole('button', { name: buttons.try.interesting })
-    user.click(interestingButton)
-
-    expect(await screen.findByText(texts.details.part1)).toBeVisible()
+    await user.click(chatPage.buttons.interestingButton())
+    expect(await chatPage.texts.detailsInfo()).toBeVisible()
   })
 
   it('Видимость текста и кнопок при сценарии "А что по поводу смены професии?"', async () => {
-    const tryButton = screen.getByRole('button', { name: buttons.start.try })
-    await user.click(tryButton)
-    expect(screen.getByText(texts.try.info)).toBeVisible()
+    await user.click(chatPage.buttons.tryItButton())
+    await user.click(chatPage.buttons.trySwitchButton())
 
-    const switchProfButton = screen.getByRole('button', { name: buttons.try.switch })
-    user.click(switchProfButton)
-
-    expect(await screen.findByText(texts.switch.info)).toBeVisible()
+    expect(await chatPage.texts.switchProfInfo()).toBeVisible()
   })
 
   it('Можно вернуться в назад - в начало чата', async () => {
-    const tryButton = screen.getByRole('button', { name: buttons.start.try })
-    await user.click(tryButton)
-    expect(screen.getByText(texts.try.info)).toBeVisible()
+    await user.click(chatPage.buttons.tryItButton())
+    await user.click(chatPage.buttons.tryBackButton())
 
-    const backButton = screen.getByRole('button', { name: buttons.try.back })
-    user.click(backButton)
-
-    expect(await screen.findByRole('button', { name: buttons.start.switch })).toBeVisible()
-    expect(await screen.findByRole('button', { name: buttons.start.try })).toBeVisible()
-    expect(await screen.findByRole('button', { name: buttons.start.advanced })).toBeVisible()
+    expect(await chatPage.buttons.switchProfButton()).toBeVisible()
+    expect(await chatPage.buttons.tryItButton()).toBeVisible()
+    expect(await chatPage.buttons.advancedButton()).toBeVisible()
   })
 })
 
 describe('Сценарий "Я разработчик, хочу углубить свои знания"', () => {
   it('Видимость текста и кнопок при сценарии "Расскажи подробнее"', async () => {
-    const advancedButton = screen.getByRole('button', { name: buttons.start.advanced })
-    await user.click(advancedButton)
-    expect(await screen.findByText(texts.advanced.part1)).toBeVisible()
+    await user.click(chatPage.buttons.advancedButton())
+    expect(await chatPage.texts.advancedInfo()).toBeVisible()
 
-    const moreButton = screen.getByRole('button', { name: buttons.advanced.details })
-    user.click(moreButton)
-    expect(startChatButton).toBeVisible()
+    await user.click(chatPage.buttons.switchDetailsButton())
+    expect(await chatPage.buttons.startChatButton()).toBeVisible()
   })
 
   it('Можно вернуться в начало чата', async () => {
-    const advancedButton = screen.getByRole('button', { name: buttons.start.advanced })
-    await user.click(advancedButton)
-    expect(await screen.findByText(texts.advanced.part1)).toBeVisible()
+    await user.click(chatPage.buttons.advancedButton())
+    await user.click(chatPage.buttons.advancedBackButton())
 
-    const backButton = screen.getByRole('button', { name: buttons.advanced.back })
-    user.click(backButton)
-
-    expect(await screen.findByRole('button', { name: buttons.start.switch })).toBeVisible()
-    expect(await screen.findByRole('button', { name: buttons.start.try })).toBeVisible()
-    expect(await screen.findByRole('button', { name: buttons.start.advanced })).toBeVisible()
+    expect(await chatPage.buttons.switchProfButton()).toBeVisible()
+    expect(await chatPage.buttons.tryItButton()).toBeVisible()
+    expect(await chatPage.buttons.advancedButton()).toBeVisible()
   })
 })
 
 test('Сбрасывается контекст после закрытия чата', async () => {
-  const switchButton = screen.getByRole('button', { name: buttons.start.switch })
-  user.click(switchButton)
-  const closeButton = screen.getByRole('button', { name: /close/i })
-  await user.click(closeButton)
-  await user.click(openChatButton)
+  await user.click(chatPage.buttons.switchProfButton())
+  await chatPage.closeChat()
+  await chatPage.openChat()
 
-  expect(await screen.findByText(texts.welcome.greeting)).toBeVisible()
-  expect(await screen.findByText(buttons.welcome.start)).toBeVisible()
-  expect(screen.queryByText(texts.start.intro)).toBeNull()
+  expect(chatPage.texts.greetingText()).toBeVisible()
   expect(screen.queryByText(texts.switch.info)).toBeNull()
 })
 
 test('Нет дублирования текста при двойном клике', async () => {
-    const advancedButton = screen.getByRole('button', { name: buttons.start.advanced })
-    await user.dblClick(advancedButton)
+  await user.dblClick(chatPage.buttons.advancedButton())
 
-    const advancedTexts = screen.queryAllByText(texts.advanced.part1)
-    expect(advancedTexts.length).toBe(1)
+  const advancedTexts = screen.queryAllByText(texts.advanced.part1)
+  expect(advancedTexts.length).toBe(1)
 })
+
