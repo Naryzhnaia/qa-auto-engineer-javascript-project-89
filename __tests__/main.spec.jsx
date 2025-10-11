@@ -1,21 +1,22 @@
-import '@hexlet/chatbot-v2/styles'
-import Widget from '@hexlet/chatbot-v2'
-import steps from '@hexlet/chatbot-v2/example-steps'
-import '@hexlet/chatbot-v2/styles'
+import App from '../src/App.jsx'
 import { render, screen, cleanup } from '@testing-library/react'
 import { expect, test, beforeEach, afterEach, describe, it } from 'vitest'
 import userEvent from '@testing-library/user-event'
 import { texts } from '../__fixtures__/texts.js'
-import { ChatPage } from '../__fixtures__/ChatPage.js'
+import { ChatPage } from './ChatPage.js'
+import { AppPage } from './AppPage.js'
 
 let user
 let chatPage
+let appPage
 
 beforeEach(async () => {
   user = userEvent.setup()
-  render(Widget(steps))
+  appPage = new AppPage(screen, user)
   chatPage = new ChatPage(screen, user)
-  await chatPage.openChat()
+  render(<App />)
+  await appPage.openWidget()
+  await chatPage.startChat()
 })
 
 afterEach(() => {
@@ -43,13 +44,12 @@ describe('Сценарий "Сменить профессию или трудо�
 
     await user.click(chatPage.buttons.switchDetailsButton())
     expect(await chatPage.texts.detailsInfo()).toBeVisible()
-    expect(await chatPage.buttons.subscribeButton()).toBeVisible()
+    expect(await chatPage.buttons.detailsSubscribeButton()).toBeVisible()
     expect(await chatPage.buttons.subscribeBackButton()).toBeVisible()
 
-    await user.click(chatPage.buttons.subscribeButton())
+    await user.click(chatPage.buttons.detailsSubscribeButton())
     expect(await chatPage.texts.subscribeLinkText()).toBeVisible()
-    expect(chatPage.buttons.subscribeButton()).toBeVisible()
-    expect(await chatPage.buttons.subscribeButton()).toBeVisible()
+    expect(await chatPage.buttons.detailsSubscribeButton()).toBeVisible()
   })
 
   it('Видимость текста и кнопок при сценарии "А есть что-нибудь попроще?"', async () => {
@@ -119,7 +119,8 @@ describe('Сценарий "Я разработчик, хочу углубить
 test('Сбрасывается контекст после закрытия чата', async () => {
   await user.click(chatPage.buttons.switchProfButton())
   await chatPage.closeChat()
-  await chatPage.openChat()
+  await appPage.openWidget()
+  await chatPage.startChat()
 
   expect(chatPage.texts.greetingText()).toBeVisible()
   expect(screen.queryByText(texts.switch.info)).toBeNull()
