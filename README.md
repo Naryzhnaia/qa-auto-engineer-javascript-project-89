@@ -1,12 +1,18 @@
-# React + Vite
+# Тестирование виджета чат-бота
+## Что есть в проекте
+- App на React - исходный код приложения (предоставлен изначально)
+- Widget на React, который встроен в App
+- Набор автоматизированных тестов, покрывающих основные пользовательские сценарии работы виджета в App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Что сделала я
+Я разработала и реализовала **автоматизированные тесты** для данного проекта. Для тестирования проекта используются:
+- Vite, обеспечивающий корректную работу React и Vitest вместе,
+- Vitest — тестовый фреймворк,
+- @testing-library/react@16 — библиотека для тестирования React-компонентов.
 
-Currently, two official plugins are available:
+## Установка и запуск проекта
+git clone https://github.com/Naryzhnaia/qa-auto-engineer-javascript-project-89.git
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+npm i
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Чтобы запустить тесты npm test 
