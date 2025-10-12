@@ -3,8 +3,8 @@ import buttons from '../__fixtures__/buttons.js'
 
 export class ChatPage {
   constructor(screen, user) {
-    this.screen = screen;
-    this.user = user;
+    this.screen = screen
+    this.user = user
   }
 
   texts = {
@@ -50,10 +50,10 @@ export class ChatPage {
   }
 
   async startChat() {
-    await this.user.click(await this.buttons.startChatButton());
+    await this.user.click(await this.buttons.startChatButton())
   }
 
   async closeChat() {
-    await this.user.click(this.buttons.closeChatButton());
+    await this.user.click(this.buttons.closeChatButton())
   }
 }
