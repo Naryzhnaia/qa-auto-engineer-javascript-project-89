@@ -25,94 +25,94 @@ afterEach(() => {
 
 test('Не видно окно чата после закрытия чата', async () => {
   await chatPage.closeChat()
-  expect(chatPage.buttons.openChatButton()).toBeInTheDocument()
+  expect(chatPage.buttons.openChatButton()).to.exist
 })
 
 test('Старт чата и видимость базовых опций', async () => {
-  expect(chatPage.texts.title()).toBeInTheDocument()
-  expect(chatPage.texts.greetingText()).toBeInTheDocument()
-  expect(chatPage.texts.introText()).toBeInTheDocument()
-  expect(await chatPage.buttons.switchProfButton()).toBeInTheDocument()
-  expect(await chatPage.buttons.tryItButton()).toBeInTheDocument()
-  expect(await chatPage.buttons.advancedButton()).toBeInTheDocument()
+  expect(chatPage.texts.title()).to.exist
+  expect(chatPage.texts.greetingText()).to.exist
+  expect(chatPage.texts.introText()).to.exist
+  expect(await chatPage.buttons.switchProfButton()).to.exist
+  expect(await chatPage.buttons.tryItButton()).to.exist
+  expect(await chatPage.buttons.advancedButton()).to.exist
 })
 
 describe('Сценарий "Сменить профессию или трудоустроиться"', () => {
   it('Видимость текста и кнопок при сценарии записи на курс', async () => {
     await user.click(chatPage.buttons.switchProfButton())
-    expect(await chatPage.texts.switchProfInfo()).toBeInTheDocument()
+    expect(await chatPage.texts.switchProfInfo()).to.exist
 
     await user.click(chatPage.buttons.switchDetailsButton())
-    expect(await chatPage.texts.detailsInfo()).toBeInTheDocument()
-    expect(await chatPage.buttons.detailsSubscribeButton()).toBeInTheDocument()
-    expect(await chatPage.buttons.subscribeBackButton()).toBeInTheDocument()
+    expect(await chatPage.texts.detailsInfo()).to.exist
+    expect(await chatPage.buttons.detailsSubscribeButton()).to.exist
+    expect(await chatPage.buttons.subscribeBackButton()).to.exist
 
     await user.click(chatPage.buttons.detailsSubscribeButton())
-    expect(await chatPage.texts.subscribeLinkText()).toBeInTheDocument()
-    expect(await chatPage.buttons.detailsSubscribeButton()).toBeInTheDocument()
+    expect(await chatPage.texts.subscribeLinkText()).to.exist
+    expect(await chatPage.buttons.detailsSubscribeButton()).to.exist
   })
 
   it('Видимость текста и кнопок при сценарии "А есть что-нибудь попроще?"', async () => {
     await user.click(chatPage.buttons.switchProfButton())
     await user.click(chatPage.buttons.subscribeEasyButton())
-    expect(await chatPage.texts.tryInfoText()).toBeInTheDocument()
-    expect(await chatPage.buttons.interestingButton()).toBeInTheDocument()
-    expect(await chatPage.buttons.trySwitchButton()).toBeInTheDocument()
-    expect(await chatPage.buttons.tryBackButton()).toBeInTheDocument()
+    expect(await chatPage.texts.tryInfoText()).to.exist
+    expect(await chatPage.buttons.interestingButton()).to.exist
+    expect(await chatPage.buttons.trySwitchButton()).to.exist
+    expect(await chatPage.buttons.tryBackButton()).to.exist
   })
 
   it('Можно вернуться в начало чата', async () => {
     await user.click(chatPage.buttons.switchProfButton())
     await user.click(chatPage.buttons.subscribeBackButton())
 
-    expect(await chatPage.buttons.switchProfButton()).toBeInTheDocument()
-    expect(await chatPage.buttons.tryItButton()).toBeInTheDocument()
-    expect(await chatPage.buttons.advancedButton()).toBeInTheDocument()
+    expect(await chatPage.buttons.switchProfButton()).to.exist
+    expect(await chatPage.buttons.tryItButton()).to.exist
+    expect(await chatPage.buttons.advancedButton()).to.exist
   })
 })
 
 describe('Сценарий "Попробовать себя в IT"', () => {
   it('Видимость текста и кнопок при сценарии "Интересно"', async () => {
     await user.click(chatPage.buttons.tryItButton())
-    expect(await chatPage.texts.tryInfoText()).toBeInTheDocument()
+    expect(await chatPage.texts.tryInfoText()).to.exist
 
     await user.click(chatPage.buttons.interestingButton())
-    expect(await chatPage.texts.detailsInfo()).toBeInTheDocument()
+    expect(await chatPage.texts.detailsInfo()).to.exist
   })
 
   it('Видимость текста и кнопок при сценарии "А что по поводу смены професии?"', async () => {
     await user.click(chatPage.buttons.tryItButton())
     await user.click(chatPage.buttons.trySwitchButton())
 
-    expect(await chatPage.texts.switchProfInfo()).toBeInTheDocument()
+    expect(await chatPage.texts.switchProfInfo()).to.exist
   })
 
   it('Можно вернуться в назад - в начало чата', async () => {
     await user.click(chatPage.buttons.tryItButton())
     await user.click(chatPage.buttons.tryBackButton())
 
-    expect(await chatPage.buttons.switchProfButton()).toBeInTheDocument()
-    expect(await chatPage.buttons.tryItButton()).toBeInTheDocument()
-    expect(await chatPage.buttons.advancedButton()).toBeInTheDocument()
+    expect(await chatPage.buttons.switchProfButton()).to.exist
+    expect(await chatPage.buttons.tryItButton()).to.exist
+    expect(await chatPage.buttons.advancedButton()).to.exist
   })
 })
 
 describe('Сценарий "Я разработчик, хочу углубить свои знания"', () => {
   it('Видимость текста и кнопок при сценарии "Расскажи подробнее"', async () => {
     await user.click(chatPage.buttons.advancedButton())
-    expect(await chatPage.texts.advancedInfo()).toBeInTheDocument()
+    expect(await chatPage.texts.advancedInfo()).to.exist
 
     await user.click(chatPage.buttons.switchDetailsButton())
-    expect(await chatPage.buttons.startChatButton()).toBeInTheDocument()
+    expect(await chatPage.buttons.startChatButton()).to.exist
   })
 
   it('Можно вернуться в начало чата', async () => {
     await user.click(chatPage.buttons.advancedButton())
     await user.click(chatPage.buttons.advancedBackButton())
 
-    expect(await chatPage.buttons.switchProfButton()).toBeInTheDocument()
-    expect(await chatPage.buttons.tryItButton()).toBeInTheDocument()
-    expect(await chatPage.buttons.advancedButton()).toBeInTheDocument()
+    expect(await chatPage.buttons.switchProfButton()).to.exist
+    expect(await chatPage.buttons.tryItButton()).to.exist
+    expect(await chatPage.buttons.advancedButton()).to.exist
   })
 })
 
@@ -122,7 +122,7 @@ test('Сбрасывается контекст после закрытия ча
   await appPage.openWidget()
   await chatPage.startChat()
 
-  expect(chatPage.texts.greetingText()).toBeInTheDocument()
+  expect(chatPage.texts.greetingText()).to.exist
   expect(screen.queryByText(texts.switch.info)).toBeNull()
 })
 
@@ -132,4 +132,3 @@ test('Нет дублирования текста при двойном кли�
   const advancedTexts = screen.queryAllByText(texts.advanced.part1)
   expect(advancedTexts.length).toBe(1)
 })
-
