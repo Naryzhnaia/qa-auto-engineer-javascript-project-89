@@ -6,15 +6,11 @@ export class AppPage {
     this.user = user
   }
 
-  get openChatButton() {
-    return this.screen.getByRole('button', { name: buttons.welcome.openChat })
-  }
-
-  get closeChatButton() {
-    return this.screen.getByRole('button', { name: /close/i })
+  buttons = {
+    openChatButton: () => this.screen.getByRole('button', { name: buttons.welcome.openChat }),
   }
 
   async openWidget() {
-    await this.user.click(this.openChatButton)
+    await this.user.click(this.buttons.openChatButton())
   }
 }
