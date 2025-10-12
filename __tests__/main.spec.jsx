@@ -2,7 +2,7 @@ import App from '../src/App.jsx'
 import { render, screen, cleanup } from '@testing-library/react'
 import { expect, test, beforeEach, afterEach, describe, it } from 'vitest'
 import userEvent from '@testing-library/user-event'
-import { texts } from '../__fixtures__/texts.js'
+import texts from '../__fixtures__/texts.js'
 import { ChatPage } from './ChatPage.js'
 import { AppPage } from './AppPage.js'
 

@@ -1,4 +1,4 @@
-export const buttons = {
+const buttons = {
   welcome: {
     openChat: 'Открыть Чат',
     start: 'Начать разговор',
@@ -31,3 +31,5 @@ export const buttons = {
     back: 'Верни меня в начало',
   }
 }
+
+export default buttons

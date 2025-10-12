@@ -1,5 +1,5 @@
-import { texts } from '../__fixtures__/texts.js'
-import { buttons } from '../__fixtures__/buttons.js'
+import texts from '../__fixtures__/texts.js'
+import buttons from '../__fixtures__/buttons.js'
 
 export class ChatPage {
   constructor(screen, user) {

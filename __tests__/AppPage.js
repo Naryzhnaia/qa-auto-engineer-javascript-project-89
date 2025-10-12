@@ -1,4 +1,4 @@
-import { buttons } from '../__fixtures__/buttons.js'
+import buttons from '../__fixtures__/buttons.js'
 
 export class AppPage {
   constructor(screen, user) {
@@ -7,6 +7,8 @@ export class AppPage {
   }
 
   get openChatButton() {
+    console.log("buttttttons")
+    console.log(buttons)
     return this.screen.getByRole('button', { name: buttons.welcome.openChat })
   }
 

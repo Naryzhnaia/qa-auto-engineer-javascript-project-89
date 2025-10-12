@@ -1,4 +1,4 @@
-export const texts = {
+const texts = {
   welcome: {
     greeting: 'Привет! Я ваш виртуальный помощник. Нажмите "Начать разговор", чтобы открыть чат',
   },
@@ -24,3 +24,5 @@ export const texts = {
     bye: 'Был рад знакомству! Увидимся ✋',
   }
 }
+
+export default texts
