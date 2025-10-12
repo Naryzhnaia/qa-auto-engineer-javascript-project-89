@@ -7,8 +7,6 @@ export class AppPage {
   }
 
   get openChatButton() {
-    console.log("buttttttons")
-    console.log(buttons)
     return this.screen.getByRole('button', { name: buttons.welcome.openChat })
   }
 
