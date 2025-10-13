@@ -29,7 +29,7 @@ const buttons = {
   subscribe: {
     again: 'Останусь здесь, запишусь на курс',
     back: 'Верни меня в начало',
-  }
+  },
 }
 
 export default buttons

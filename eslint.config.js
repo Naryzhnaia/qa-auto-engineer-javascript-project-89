@@ -1,59 +1,37 @@
-// eslint.config.js
 import js from '@eslint/js'
-import react from 'eslint-plugin-react'
-import reactHooks from 'eslint-plugin-react-hooks'
-import jsxA11y from 'eslint-plugin-jsx-a11y'
+import globals from 'globals'
 import stylistic from '@stylistic/eslint-plugin'
-import prettier from 'eslint-config-prettier'
+import pluginReact from 'eslint-plugin-react'
+import { defineConfig } from 'eslint/config'
+import { includeIgnoreFile } from '@eslint/compat'
+import { fileURLToPath } from 'url'
+import vitest from '@vitest/eslint-plugin'
 
-export default [
-  js.configs.recommended,
+const gitIgnorePath = fileURLToPath(new URL('.gitignore', import.meta.url))
+const eslintIgnorePath = fileURLToPath(new URL('.eslintignore', import.meta.url))
+
+export default defineConfig([
+  includeIgnoreFile(gitIgnorePath),
+  includeIgnoreFile(eslintIgnorePath),
+  stylistic.configs.recommended,
+  { files: ['**/*.{js,mjs,cjs,jsx}'], plugins: { js }, extends: ['js/recommended'] },
+  { files: ['**/*.{js,mjs,cjs,jsx}'], languageOptions: { globals: globals.browser } },
+  pluginReact.configs.flat.recommended,
   {
-    files: ['**/*.{js,jsx}'],
-    ignores: ['dist/**', 'build/**', 'node_modules/**'],
-    languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-      globals: {
-        window: true,
-        document: true,
-        console: true,
-      },
-    },
-    plugins: {
-      react,
-      'react-hooks': reactHooks,
-      'jsx-a11y': jsxA11y,
-      '@stylistic': stylistic,
-    },
     rules: {
-      // --- React ---
-      'react/react-in-jsx-scope': 'off', // Не нужен в React 17+
-      'react/prop-types': 'off',
-      'react/jsx-uses-react': 'off',
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
-
-      // --- Стиль кода ---
-      indent: 'off',
-      '@stylistic/indent': ['error', 2],
-      '@stylistic/jsx-indent': ['error', 2],
-      '@stylistic/jsx-indent-props': ['error', 2],
-      '@stylistic/arrow-parens': ['error', 'as-needed'],
-      '@stylistic/semi': ['error', 'never'],
-      '@stylistic/quotes': ['error', 'single'],
-      '@stylistic/no-trailing-spaces': 'error',
-      '@stylistic/object-curly-spacing': ['error', 'always'],
-
-      // --- Прочее ---
-      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-      'no-console': 'off',
-    },
-    settings: {
-      react: {
-        version: 'detect',
-      },
+      'react/prop-types': [0],
+      'react/react-in-jsx-scope': 0,
+      'react/jsx-uses-react': 0,
     },
   },
-  prettier, // 🔧 выключает конфликты с Prettier
-]
+  {
+    files: ['tests/**'], // or any other pattern
+    plugins: {
+      vitest,
+    },
+    rules: {
+      ...vitest.configs.recommended.rules, // you can also use vitest.configs.all.rules to enable all rules
+      'vitest/max-nested-describe': ['error', { max: 3 }], // you can also modify rules' behavior using option like this
+    },
+  },
+])
