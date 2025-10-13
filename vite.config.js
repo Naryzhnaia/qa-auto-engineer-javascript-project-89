@@ -14,5 +14,10 @@ export default defineConfig({
       inline: [/hexlet\/chatbot-v2/],
     },
     css: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'lcov'],
+      reportsDirectory: './coverage',
+    },
   },
 })
