@@ -1,7 +1,10 @@
 import texts from '../__fixtures__/texts.js'
 import buttons from '../__fixtures__/buttons.js'
+import steps from '../__fixtures__/steps.js'
+import Widget from '@hexlet/chatbot-v2'
+import { render } from '@testing-library/react'
 
-export class ChatPage {
+export class WidgetPage {
   constructor(screen, user) {
     this.screen = screen
     this.user = user
@@ -47,6 +50,14 @@ export class ChatPage {
     subscribeEndBackButton: () => this.screen.getByRole('button', { name: buttons.subscribe.back }),
 
     closeChatButton: () => this.screen.getByRole('button', { name: /close/i }),
+  }
+
+  async renderWidget() {
+    render(Widget(steps))
+  }
+
+  async openWidget() {
+    await this.user.click(await this.buttons.openChatButton())
   }
 
   async startChat() {

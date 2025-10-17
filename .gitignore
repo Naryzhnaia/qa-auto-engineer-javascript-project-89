@@ -1,2 +1,4 @@
 node_modules/
 .vitest-preview
+coverage/
+hexlet-chatbot-v2.d.ts
