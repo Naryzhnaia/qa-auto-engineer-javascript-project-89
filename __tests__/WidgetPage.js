@@ -15,40 +15,14 @@ export class WidgetPage {
     greetingText: () => this.screen.getByText(texts.welcome.greeting),
     introText: () => this.screen.getByText(texts.start.intro),
     switchProfInfo: () => this.screen.getByText(texts.switch.info),
-    detailsInfo: () => this.screen.getByText(texts.details.part1),
-    detailsPart2: () => this.screen.getByText(texts.details.part2),
-    subscribeLinkText: () => this.screen.getByText(texts.subscribe.link),
-    tryInfoText: () => this.screen.getByText(texts.try.info),
-    advancedInfo: () => this.screen.getByText(texts.advanced.part1),
-    advancedPart2: () => this.screen.getByText(texts.advanced.part2),
-    subscribeByeText: () => this.screen.getByText(texts.subscribe.bye),
   }
 
   buttons = {
-    openChatButton: () => this.screen.getByRole('button', { name: buttons.welcome.openChat }),
+    openWidgetButton: () => this.screen.getByRole('button', { name: buttons.welcome.openChat }),
     startChatButton: () => this.screen.findByRole('button', { name: buttons.welcome.start }),
-
     switchProfButton: () => this.screen.getByRole('button', { name: buttons.start.switch }),
     tryItButton: () => this.screen.getByRole('button', { name: buttons.start.try }),
     advancedButton: () => this.screen.getByRole('button', { name: buttons.start.advanced }),
-
-    tryBackButton: () => this.screen.getByRole('button', { name: buttons.try.back }),
-    trySwitchButton: () => this.screen.getByRole('button', { name: buttons.try.switch }),
-    interestingButton: () => this.screen.getByRole('button', { name: buttons.try.interesting }),
-
-    switchDetailsButton: () => this.screen.getByRole('button', { name: buttons.switch.details }),
-    subscribeEasyButton: () => this.screen.getByRole('button', { name: buttons.switch.try }),
-    subscribeBackButton: () => this.screen.getByRole('button', { name: buttons.switch.back }),
-
-    detailsSubscribeButton: () => this.screen.getByRole('button', { name: buttons.details.subscribe }),
-    detailsBackButton: () => this.screen.getByRole('button', { name: buttons.details.back }),
-
-    advancedDetailsButton: () => this.screen.getByRole('button', { name: buttons.advanced.details }),
-    advancedBackButton: () => this.screen.getByRole('button', { name: buttons.advanced.back }),
-
-    subscribeAgainButton: () => this.screen.getByRole('button', { name: buttons.subscribe.again }),
-    subscribeEndBackButton: () => this.screen.getByRole('button', { name: buttons.subscribe.back }),
-
     closeChatButton: () => this.screen.getByRole('button', { name: /close/i }),
   }
 
@@ -57,7 +31,7 @@ export class WidgetPage {
   }
 
   async openWidget() {
-    await this.user.click(await this.buttons.openChatButton())
+    await this.user.click(await this.buttons.openWidgetButton())
   }
 
   async startChat() {
