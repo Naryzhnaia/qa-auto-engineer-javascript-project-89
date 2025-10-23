@@ -10,12 +10,12 @@ export class AppPage {
 
   regisrationForm = {
     emailInput: () => this.screen.getByLabelText(/email/i),
-    passwordInput: () => this.screen.getByRole('textbox', { name: /пароль/i }),
+    passwordInput: () => this.screen.getByLabelText(/пароль/i),
     addressInput: () => this.screen.getByLabelText(/адрес/i),
     cityInput: () => this.screen.getByLabelText(/город/i),
     countriesList: () => this.screen.getByLabelText(/страна/i),
     agree: () => this.screen.getByRole('checkbox'),
-    submitButton: () => screen.getByRole('button', { name: /зарегистрироваться/i }),
+    submitButton: () => this.screen.getByRole('button', { name: /зарегистрироваться/i }),
   }
 
   buttons = {
@@ -30,12 +30,15 @@ export class AppPage {
     await this.user.click(this.buttons.openChatButton())
   }
 
-  async registerUser(email, password, address, city) {
-    await this.user.type(this.emailInput, email)
-    await this.user.type(this.password, password)
-    await this.user.type(this.addressInput, address)
-    await this.user.type(this.cityInput, city)
-    await this.user.selectOption(this.countriesList, 'Россия')
-    await this.user.click(this.regisrationForm.submitButton)
+  async fillForm(email, password, address, city) {
+    await this.user.type(this.regisrationForm.emailInput(), email)
+    await this.user.type(this.regisrationForm.passwordInput(), password)
+    await this.user.type(this.regisrationForm.addressInput(), address)
+    await this.user.type(this.regisrationForm.cityInput(), city)
+    await this.user.selectOptions(this.regisrationForm.countriesList(), 'Россия')
+  }
+
+  async submitForm() {
+    await this.user.click(this.regisrationForm.submitButton())
   }
 }

@@ -24,28 +24,6 @@ afterEach(() => {
   cleanup()
 })
 
-describe('Проверки формы регистрации', async () => {
-  beforeEach(async () => {
-    user = userEvent.setup()
-    appPage = new AppPage(screen, user)
-    widgetPage = new WidgetPage(screen, user)
-  })
-
-  test.only('Успешная регистрация', async () => {
-    appPage.registerUser(registrationData.email, registrationData.password, registrationData.address, registrationData.city)
-    //expect(() => appPage.renderApp()).not.toThrow()
-  })
-
-  test('Открытие и закрытие виджета', async () => {
-    appPage.renderApp()
-    await appPage.openWidget()
-    expect(widgetPage.texts.title()).to.exist
-
-    await widgetPage.closeChat()
-    expect(widgetPage.buttons.openWidgetButton()).toBeVisible()
-  })
-})
-
 describe('Интеграционные тесты', async () => {
   beforeEach(async () => {
     user = userEvent.setup()
@@ -95,5 +73,43 @@ describe('Проверки виджета', async () => {
     widgetPage.renderWidget()
     await widgetPage.openWidget()
     expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('Проверки формы регистрации', async () => {
+  beforeEach(async () => {
+    user = userEvent.setup()
+    appPage = new AppPage(screen, user)
+    widgetPage = new WidgetPage(screen, user)
+    appPage.renderApp()
+  })
+
+  test('Успешная отправка формы', async () => {
+    await appPage.fillForm(registrationData.email, registrationData.password, registrationData.address, registrationData.city)
+    await appPage.submitForm()
+    expect(screen.getByText('Адрес')).toBeInTheDocument()
+    expect(screen.getByText(registrationData.address)).toBeInTheDocument()
+    expect(screen.getByText('Город')).toBeInTheDocument()
+    expect(screen.getByText(registrationData.city)).toBeInTheDocument()
+    expect(screen.getByText('Страна')).toBeInTheDocument()
+    expect(screen.getByText('Россия')).toBeInTheDocument()
+    expect(screen.getByText('Email')).toBeInTheDocument()
+    expect(screen.getByText(registrationData.email)).toBeInTheDocument()
+  })
+
+  test('Открытие виджета не влияет на состояние и отправку формы', async () => {
+    await appPage.fillForm(registrationData.email, registrationData.password, registrationData.address, registrationData.city)
+    await appPage.openWidget()
+    await widgetPage.startChat()
+    expect(widgetPage.texts.title()).toBeInTheDocument()
+    await appPage.submitForm()
+    expect(screen.getByText('Адрес')).toBeInTheDocument()
+    expect(screen.getByText(registrationData.address)).toBeInTheDocument()
+    expect(screen.getByText('Город')).toBeInTheDocument()
+    expect(screen.getByText(registrationData.city)).toBeInTheDocument()
+    expect(screen.getByText('Страна')).toBeInTheDocument()
+    expect(screen.getByText('Россия')).toBeInTheDocument()
+    expect(screen.getByText('Email')).toBeInTheDocument()
+    expect(screen.getByText(registrationData.email)).toBeInTheDocument()
   })
 })

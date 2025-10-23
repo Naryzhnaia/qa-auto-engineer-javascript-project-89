@@ -3,3 +3,8 @@ import { vi } from 'vitest'
 
 // Заглушка для всех CSS-файлов
 vi.mock('*.css', () => ({}))
+
+// Простая заглушка getComputedStyle
+window.getComputedStyle = () => ({
+  getPropertyValue: () => '',
+})
