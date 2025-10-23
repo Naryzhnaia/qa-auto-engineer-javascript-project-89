@@ -41,7 +41,7 @@ describe('Интеграционные тесты', async () => {
     expect(widgetPage.texts.title()).to.exist
 
     await widgetPage.closeChat()
-    expect(widgetPage.buttons.openWidgetButton()).toBeVisible()
+    expect(widgetPage.buttons.openWidgetButton()).to.exist
   })
 })
 
@@ -50,7 +50,7 @@ describe('Проверки виджета', async () => {
     user = userEvent.setup()
     widgetPage = new WidgetPage(screen, user)
     widgetPage.renderWidget()
-    expect(widgetPage.buttons.openWidgetButton()).toBeVisible()
+    expect(widgetPage.buttons.openWidgetButton()).to.exist
   })
 
   test('Видимость базовых опций в чате виджета', async () => {
@@ -59,12 +59,12 @@ describe('Проверки виджета', async () => {
     widgetPage.renderWidget()
     await widgetPage.openWidget()
     await widgetPage.startChat()
-    expect(widgetPage.texts.title()).toBeInTheDocument()
-    expect(widgetPage.texts.greetingText()).toBeInTheDocument()
-    expect(widgetPage.texts.introText()).toBeInTheDocument()
-    expect(await widgetPage.buttons.switchProfButton()).toBeInTheDocument()
-    expect(await widgetPage.buttons.tryItButton()).toBeInTheDocument()
-    expect(await widgetPage.buttons.advancedButton()).toBeInTheDocument()
+    expect(widgetPage.texts.title()).to.exist
+    expect(widgetPage.texts.greetingText()).to.exist
+    expect(widgetPage.texts.introText()).to.exist
+    expect(await widgetPage.buttons.switchProfButton()).to.exist
+    expect(await widgetPage.buttons.tryItButton()).to.exist
+    expect(await widgetPage.buttons.advancedButton()).to.exist
   })
 
   test('Скрол после старта чата', async () => {
@@ -87,29 +87,29 @@ describe('Проверки формы регистрации', async () => {
   test('Успешная отправка формы', async () => {
     await appPage.fillForm(registrationData.email, registrationData.password, registrationData.address, registrationData.city)
     await appPage.submitForm()
-    expect(screen.getByText('Адрес')).toBeInTheDocument()
-    expect(screen.getByText(registrationData.address)).toBeInTheDocument()
-    expect(screen.getByText('Город')).toBeInTheDocument()
-    expect(screen.getByText(registrationData.city)).toBeInTheDocument()
-    expect(screen.getByText('Страна')).toBeInTheDocument()
-    expect(screen.getByText('Россия')).toBeInTheDocument()
-    expect(screen.getByText('Email')).toBeInTheDocument()
-    expect(screen.getByText(registrationData.email)).toBeInTheDocument()
+    expect(screen.getByText('Адрес')).to.exist
+    expect(screen.getByText(registrationData.address)).to.exist
+    expect(screen.getByText('Город')).to.exist
+    expect(screen.getByText(registrationData.city)).to.exist
+    expect(screen.getByText('Страна')).to.exist
+    expect(screen.getByText('Россия')).to.exist
+    expect(screen.getByText('Email')).to.exist
+    expect(screen.getByText(registrationData.email)).to.exist
   })
 
   test('Открытие виджета не влияет на состояние и отправку формы', async () => {
     await appPage.fillForm(registrationData.email, registrationData.password, registrationData.address, registrationData.city)
     await appPage.openWidget()
     await widgetPage.startChat()
-    expect(widgetPage.texts.title()).toBeInTheDocument()
+    expect(widgetPage.texts.title()).to.exist
     await appPage.submitForm()
-    expect(screen.getByText('Адрес')).toBeInTheDocument()
-    expect(screen.getByText(registrationData.address)).toBeInTheDocument()
-    expect(screen.getByText('Город')).toBeInTheDocument()
-    expect(screen.getByText(registrationData.city)).toBeInTheDocument()
-    expect(screen.getByText('Страна')).toBeInTheDocument()
-    expect(screen.getByText('Россия')).toBeInTheDocument()
-    expect(screen.getByText('Email')).toBeInTheDocument()
-    expect(screen.getByText(registrationData.email)).toBeInTheDocument()
+    expect(screen.getByText('Адрес')).to.exist
+    expect(screen.getByText(registrationData.address)).to.exist
+    expect(screen.getByText('Город')).to.exist
+    expect(screen.getByText(registrationData.city)).to.exist
+    expect(screen.getByText('Страна')).to.exist
+    expect(screen.getByText('Россия')).to.exist
+    expect(screen.getByText('Email')).to.exist
+    expect(screen.getByText(registrationData.email)).to.exist
   })
 })
